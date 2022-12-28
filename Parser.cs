@@ -24,12 +24,11 @@ namespace TWscraper
         {
             Path = path;
             this.htmlNodes = htmlNodes;
+            staments = new string[htmlNodes.Count][];
         }
 
         public void ParseIncomeAsync()
         {
-            staments = new string[htmlNodes.Count][];
-
             for (int i = 0; i < htmlNodes.Count-1; i++)
             {
                 var nodeText = WebUtility.HtmlDecode(htmlNodes[i].InnerText.ToString());
@@ -52,10 +51,7 @@ namespace TWscraper
         public void SaveIncomeAsync()
         {
             try
-            {
-                ;
-                Console.WriteLine(staments[3][1] + ",");
-
+            {                
                 StreamWriter writer = new StreamWriter(Path);
 
                 for (int i = 0; i < staments.Length - 1; i++)
