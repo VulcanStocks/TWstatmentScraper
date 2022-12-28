@@ -35,10 +35,18 @@ namespace TWscraper
                 var nodeText = WebUtility.HtmlDecode(htmlNodes[i].InnerText.ToString());
                 byte[] uni = Encoding.Unicode.GetBytes(nodeText);
                 string Ascii = Encoding.ASCII.GetString(uni);
-
+                Ascii = CleanUp(Ascii);
                 string[] words = Ascii.Split("*");
                 staments[i] = words;
             }
+        }
+
+        private string CleanUp(string Ascii)
+        {
+            Ascii = Regex.Replace(Ascii, @"\p{C}+", string.Empty);
+            Ascii = Ascii.Replace(",", string.Empty);
+            Ascii = Ascii.Replace(" ", string.Empty);
+            return Ascii;
         }
 
         public void SaveIncomeAsync()
