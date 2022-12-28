@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "7zr8ecUwVzGZdvLuwPT0aL6fD04XRxjE5wRpLEli0EZEnrWdOIq4mW092hC6Y/XXBN8yrSr8c53HqW6jBrcHuQ==",
+  "dgSpecHash": "DOsaDAEZEdTW+zb1eCAtrKo32ksUW7wv9z4XURksGOv/Lb06g/ApvdNz7f1IHS9SBMPsW84YpXC8EuJ349CT0g==",
   "success": true,
   "projectFilePath": "C:\\Programmering\\Projekt\\VulcanStocks\\Scrapers\\TWscraper\\TWscraper.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\21ulwe\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
     "C:\\Users\\21ulwe\\.nuget\\packages\\htmlagilitypack\\1.11.46\\htmlagilitypack.1.11.46.nupkg.sha512",
     "C:\\Users\\21ulwe\\.nuget\\packages\\microsoft.aspnetcore.webutilities\\2.2.0\\microsoft.aspnetcore.webutilities.2.2.0.nupkg.sha512",
     "C:\\Users\\21ulwe\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.0\\microsoft.bcl.asyncinterfaces.1.1.0.nupkg.sha512",
