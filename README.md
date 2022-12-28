@@ -1,5 +1,5 @@
 # TWstatmentScraper
-Welcome to the TWscraper C# web scraper! This scraper is designed to scrape financial statements from tradingview.com. Here is a brief overview of how to use it:
+Welcome to the TWstatmentScraper C# web scraper! This scraper is designed to scrape financial statements from tradingview.com. Here is a brief overview of how to use it:
 
 **Getting Started**
 To use the scraper, you will need to first import the TWscraper namespace:
