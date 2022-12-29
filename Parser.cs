@@ -29,13 +29,14 @@ namespace TWscraper
 
         public void ParseIncomeAsync()
         {
-            for (int i = 0; i < htmlNodes.Count-1; i++)
+            for (int i = 0; i < htmlNodes.Count; i++)
             {
                 var nodeText = WebUtility.HtmlDecode(htmlNodes[i].InnerText.ToString());
                 byte[] uni = Encoding.Unicode.GetBytes(nodeText);
                 string Ascii = Encoding.ASCII.GetString(uni);
                 Ascii = CleanUp(Ascii);
                 string[] words = Ascii.Split("*");
+                words = CleanUpWords(words);
                 staments[i] = words;
             }
         }
@@ -44,23 +45,35 @@ namespace TWscraper
         {
             Ascii = Regex.Replace(Ascii, @"\p{C}+", string.Empty);
             Ascii = Ascii.Replace(",", string.Empty);
-            Ascii = Ascii.Replace(" ", string.Empty);
+            Ascii = Ascii.Replace(" ", string.Empty); 
+            Ascii = Ascii.Replace("YoYgrowth", string.Empty);
             return Ascii;
         }
 
+        private string[] CleanUpWords(string[] Words)
+        {
+            for (int i = 0; i < Words.Length; i++)
+            {
+                string[] split = Words[i].Split(new char[] { '+', '"', });
+
+
+                Words[i] = split[0];
+            }
+
+            return Words;
+        }
         public void SaveIncomeAsync()
         {
             try
-            {                
+            {
                 StreamWriter writer = new StreamWriter(Path);
 
-                for (int i = 0; i < staments.Length - 1; i++)
+                foreach (var statement in staments)
                 {
-                    for (int j = 0; j < staments[i].Length -1; j++)
+                    foreach (var word in statement)
                     {
-                        Console.WriteLine(staments[i][j] + ",");
-
-                        writer.Write(staments[i][j] + ",");
+                        Console.WriteLine(word + ",");
+                        writer.Write(word + ",");
                     }
                     writer.WriteLine();
                 }
@@ -72,5 +85,6 @@ namespace TWscraper
                 Console.WriteLine(e.Message);
             }
         }
+
     }
 }
