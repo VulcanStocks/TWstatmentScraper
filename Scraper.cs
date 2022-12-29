@@ -51,9 +51,11 @@ public class Scraper
         }
     }
 
-    public void ScrapeDataOnce()
+    public Task ScrapeDataAsync()
     {
         value = doc.DocumentNode.SelectNodes(Xpath);
+
+        return Task.CompletedTask;
     }
 
     public void PrintNodes()
@@ -67,8 +69,8 @@ public class Scraper
     public async Task ParseAndSaveToCsvAsync(string path)
     {
         var parser = new Parser(value, path);
-        parser.ParseIncomeAsync();
-        parser.SaveIncomeAsync();
+        await parser.ParseIncomeAsync();
+        await parser.SaveIncomeAsync();
     }
 
 

@@ -27,7 +27,7 @@ namespace TWscraper
             staments = new string[htmlNodes.Count][];
         }
 
-        public void ParseIncomeAsync()
+        public Task ParseIncomeAsync()
         {
             for (int i = 0; i < htmlNodes.Count; i++)
             {
@@ -39,6 +39,7 @@ namespace TWscraper
                 words = CleanUpWords(words);
                 staments[i] = words;
             }
+            return Task.CompletedTask;
         }
 
         private string CleanUp(string Ascii)
@@ -56,13 +57,17 @@ namespace TWscraper
             {
                 string[] split = Words[i].Split(new char[] { '+', '"', });
 
-
                 Words[i] = split[0];
+
+                if (i > 0)
+                {
+                    Words[i] = Regex.Replace(Words[i], "[^0-9.]", "");
+                }
             }
 
             return Words;
         }
-        public void SaveIncomeAsync()
+        public Task SaveIncomeAsync()
         {
             try
             {
@@ -84,6 +89,9 @@ namespace TWscraper
             {
                 Console.WriteLine(e.Message);
             }
+
+            return Task.CompletedTask;
+
         }
 
     }
