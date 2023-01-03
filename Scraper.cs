@@ -9,10 +9,14 @@ public class Scraper
     public HtmlDocument doc { get; set; }
     public HtmlNodeCollection value { get; set; }
 
+    public bool UsePrefix { get; set; }
 
-    public Scraper(string dataType, string ticker)
+
+    public Scraper(string dataType, string ticker, bool UsePrefix)
     {
-        Xpath = "//div[contains(@class, 'container-_PBNXQ7k')]";
+        Xpath = "//div[contains(@class, 'value-pg2GO866')]";
+
+        this.UsePrefix = UsePrefix;
 
         switch (dataType)
         {
@@ -68,7 +72,7 @@ public class Scraper
 
     public async Task ParseAndSaveToCsvAsync(string path)
     {
-        var parser = new Parser(value, path);
+        var parser = new Parser(value, path, UsePrefix);
         await parser.ParseIncomeAsync();
         await parser.SaveIncomeAsync();
     }

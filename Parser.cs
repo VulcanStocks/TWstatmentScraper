@@ -15,18 +15,83 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace TWscraper
 {
+
+    public class DataModel
+    {
+        public List<string> columns { get; set; }
+    }
     internal class Parser
     {
         public HtmlNodeCollection htmlNodes { get; set; }
         public string Path { get; set; }
-        public string[][] staments { get; set; }
-        public Parser(HtmlNodeCollection htmlNodes, string path)
+
+        public List<DataModel> dataRows { get; set; }
+        public bool UsePrefix { get; set; }
+
+
+        public Parser(HtmlNodeCollection htmlNodes, string path, bool UsePrefix)
         {
+            this.UsePrefix = UsePrefix;
             Path = path;
             this.htmlNodes = htmlNodes;
-            staments = new string[htmlNodes.Count][];
+            dataRows = new List<DataModel>();
+        }
+        public Task ParseIncomeAsync()
+        {
+            List<string> columns = new List<string>();
+
+            int count = 0;
+            bool start = false;
+
+            foreach (var item in htmlNodes)
+            {
+                var nodeText = WebUtility.HtmlDecode(item.InnerText.ToString());
+                if (UsePrefix)
+                {
+                    nodeText = Regex.Replace(nodeText, "[^0-9.KMB+\\-%]", "");
+                }
+                else
+                {
+                    nodeText = Regex.Replace(nodeText, "[^0-9.+\\-%]", "");
+
+                }
+                if (start)
+                {
+                    columns.Add(nodeText);
+                }
+
+                if (count == 7)
+                {
+                    if (start)
+                    {
+                        dataRows.Add(new DataModel { columns = columns });
+                        foreach (var item2 in columns)
+                        {
+                            Console.WriteLine(item2);
+                        }
+                        Console.WriteLine("------------------");
+                        columns = new List<string>();
+                    }
+                    else
+                    {
+                        start = true;
+                    }
+                    count = 0;
+                }
+
+                count++;
+            }
+            
+            return Task.CompletedTask;
         }
 
+        
+
+
+
+
+
+        /*
         public Task ParseIncomeAsync()
         {
             for (int i = 0; i < htmlNodes.Count; i++)
@@ -42,14 +107,7 @@ namespace TWscraper
             return Task.CompletedTask;
         }
 
-        private string CleanUp(string Ascii)
-        {
-            Ascii = Regex.Replace(Ascii, @"\p{C}+", string.Empty);
-            Ascii = Ascii.Replace(",", string.Empty);
-            Ascii = Ascii.Replace(" ", string.Empty); 
-            Ascii = Ascii.Replace("YoYgrowth", string.Empty);
-            return Ascii;
-        }
+        
 
         private string[] CleanUpWords(string[] Words)
         {
@@ -67,18 +125,20 @@ namespace TWscraper
 
             return Words;
         }
+                */
+
         public Task SaveIncomeAsync()
         {
             try
             {
                 StreamWriter writer = new StreamWriter(Path);
 
-                foreach (var statement in staments)
+                foreach (var row in dataRows)
                 {
-                    foreach (var word in statement)
+                    foreach (var value in row.columns)
                     {
-                        Console.WriteLine(word + ",");
-                        writer.Write(word + ",");
+                        Console.WriteLine(value + ",");
+                        writer.Write(value + ",");
                     }
                     writer.WriteLine();
                 }
@@ -93,6 +153,6 @@ namespace TWscraper
             return Task.CompletedTask;
 
         }
-
     }
+
 }
