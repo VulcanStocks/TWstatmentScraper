@@ -50,7 +50,12 @@ public class Scraper
         using (Page page = (Page)await browser.NewPageAsync())
         {
             await page.GoToAsync(url);
+            var button = await page.WaitForSelectorAsync("#FY");
+            // Press the button
+            await button.ClickAsync();
+
             await page.WaitForSelectorAsync(selector);
+            
             return await page.GetContentAsync();
         }
     }
