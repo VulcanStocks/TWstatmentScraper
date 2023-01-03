@@ -105,48 +105,6 @@ namespace TWscraper
             return Task.CompletedTask;
         }
 
-
-
-
-
-
-
-        /*
-        public Task ParseIncomeAsync()
-        {
-            for (int i = 0; i < htmlNodes.Count; i++)
-            {
-                var nodeText = WebUtility.HtmlDecode(htmlNodes[i].InnerText.ToString());
-                byte[] uni = Encoding.Unicode.GetBytes(nodeText);
-                string Ascii = Encoding.ASCII.GetString(uni);
-                Ascii = CleanUp(Ascii);
-                string[] words = Ascii.Split("*");
-                words = CleanUpWords(words);
-                staments[i] = words;
-            }
-            return Task.CompletedTask;
-        }
-
-        
-
-        private string[] CleanUpWords(string[] Words)
-        {
-            for (int i = 0; i < Words.Length; i++)
-            {
-                string[] split = Words[i].Split(new char[] { '+', '"', });
-
-                Words[i] = split[0];
-
-                if (i > 0)
-                {
-                    Words[i] = Regex.Replace(Words[i], "[^0-9.]", "");
-                }
-            }
-
-            return Words;
-        }
-                */
-
         public Task SaveIncomeAsync()
         {
             try
