@@ -6,17 +6,21 @@ public class Scraper
 {
     public string Url { get; set; }
     public string Xpath { get; set; }
+    public string XpathTitles { get; set; }
     public HtmlDocument doc { get; set; }
-    public HtmlNodeCollection value { get; set; }
-
+    public HtmlNodeCollection values { get; set; }
+    public HtmlNodeCollection titles { get; set; }
     public bool UsePrefix { get; set; }
+    public bool annual { get; set; }
 
 
-    public Scraper(string dataType, string ticker, bool UsePrefix)
+    public Scraper(string dataType, string ticker, bool annual, bool UsePrefix)
     {
         Xpath = "//div[contains(@class, 'value-pg2GO866')]";
+        XpathTitles = "//span[@class='titleText-_PBNXQ7k']";
 
         this.UsePrefix = UsePrefix;
+        this.annual = annual;
 
         switch (dataType)
         {
@@ -40,7 +44,7 @@ public class Scraper
         doc.LoadHtml(htmlAsTask);
     }
 
-    public static async Task<string> LoadAndWaitForSelector(string url, string selector)
+    public async Task<string> LoadAndWaitForSelector(string url, string selector)
     {
         var browser = await Puppeteer.LaunchAsync(new LaunchOptions
         {
@@ -50,26 +54,32 @@ public class Scraper
         using (Page page = (Page)await browser.NewPageAsync())
         {
             await page.GoToAsync(url);
-            var button = await page.WaitForSelectorAsync("#FY");
-            // Press the button
-            await button.ClickAsync();
+
+            if (annual)
+            {
+                var button = await page.WaitForSelectorAsync("#FY");
+                // Press the button
+                await button.ClickAsync();
+            }
 
             await page.WaitForSelectorAsync(selector);
-            
+
             return await page.GetContentAsync();
         }
     }
 
     public Task ScrapeDataAsync()
     {
-        value = doc.DocumentNode.SelectNodes(Xpath);
+        values = doc.DocumentNode.SelectNodes(Xpath);
+
+        titles = doc.DocumentNode.SelectNodes(XpathTitles);
 
         return Task.CompletedTask;
     }
 
     public void PrintNodes()
     {
-        foreach (var item in value)
+        foreach (var item in values)
         {
             System.Console.WriteLine(item.InnerText);
         }
@@ -77,7 +87,7 @@ public class Scraper
 
     public async Task ParseAndSaveToCsvAsync(string path)
     {
-        var parser = new Parser(value, path, UsePrefix);
+        var parser = new Parser(values, titles, path, UsePrefix);
         await parser.ParseIncomeAsync();
         await parser.SaveIncomeAsync();
     }
