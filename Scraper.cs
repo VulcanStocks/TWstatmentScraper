@@ -1,25 +1,26 @@
 ﻿namespace TWscraper;
 using HtmlAgilityPack;
 using PuppeteerSharp;
+using System.IO;
 
 public class Scraper
 {
-    public string Url { get; set; }
-    public string Xpath { get; set; }
-    public string XpathTitles { get; set; }
-    public HtmlDocument doc { get; set; }
-    public HtmlNodeCollection values { get; set; }
-    public HtmlNodeCollection titles { get; set; }
-    public bool UsePrefix { get; set; }
-    public bool annual { get; set; }
+    private string Url { get; set; }
+    private string xpath { get; set; }
+    private string xpathTitles { get; set; }
+    private HtmlDocument doc { get; set; }
+    private HtmlNodeCollection values { get; set; }
+    private HtmlNodeCollection titles { get; set; }
+    private bool usePrefix { get; set; }
+    private bool annual { get; set; }
+    private Parser parser { get; set; }
 
-
-    public Scraper(string dataType, string ticker, bool annual, bool UsePrefix)
+    public void Initialize(string dataType, string ticker, bool annual, bool usePrefix)
     {
-        Xpath = "//div[contains(@class, 'value-pg2GO866')]";
-        XpathTitles = "//span[@class='titleText-_PBNXQ7k']";
+        xpath = "//div[contains(@class, 'value-pg2GO866')]";
+        xpathTitles = "//span[@class='titleText-_PBNXQ7k']";
 
-        this.UsePrefix = UsePrefix;
+        this.usePrefix = usePrefix;
         this.annual = annual;
 
         switch (dataType)
@@ -36,6 +37,17 @@ public class Scraper
         }
     }
 
+    public void InitializeParser()
+    {
+        try
+        {
+            parser = new Parser(values, titles);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
     public async Task LoadHtmlAsync()
     {
         var htmlAsTask = await LoadAndWaitForSelector(Url, ".value-pg2GO866");
@@ -44,7 +56,7 @@ public class Scraper
         doc.LoadHtml(htmlAsTask);
     }
 
-    public async Task<string> LoadAndWaitForSelector(string url, string selector)
+    private async Task<string> LoadAndWaitForSelector(string url, string selector)
     {
         var browser = await Puppeteer.LaunchAsync(new LaunchOptions
         {
@@ -70,9 +82,9 @@ public class Scraper
 
     public Task ScrapeDataAsync()
     {
-        values = doc.DocumentNode.SelectNodes(Xpath);
+        values = doc.DocumentNode.SelectNodes(xpath);
 
-        titles = doc.DocumentNode.SelectNodes(XpathTitles);
+        titles = doc.DocumentNode.SelectNodes(xpathTitles);
 
         return Task.CompletedTask;
     }
@@ -85,11 +97,14 @@ public class Scraper
         }
     }
 
-    public async Task ParseAndSaveToCsvAsync(string path)
+    public async Task ParseIncomeAsync()
     {
-        var parser = new Parser(values, titles, path, UsePrefix);
         await parser.ParseIncomeAsync();
-        await parser.SaveIncomeAsync();
+    }
+
+    public async Task SaveIncomeAsyncToCsv(string path)
+    {
+        await parser.SaveIncomeAsync(path);
     }
 
 

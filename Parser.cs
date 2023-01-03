@@ -1,17 +1,6 @@
-﻿using CsvHelper;
-using HtmlAgilityPack;
-using PuppeteerSharp;
-using System;
-using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.Globalization;
-using System.Linq;
+﻿using HtmlAgilityPack;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using TWscraper.Models;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TWscraper
 {
@@ -25,15 +14,13 @@ namespace TWscraper
     {
         public HtmlNodeCollection values { get; set; }
         public HtmlNodeCollection titles { get; set; }
-        public string Path { get; set; }
         public List<DataModel> dataRows { get; set; }
         public bool UsePrefix { get; set; }
 
 
-        public Parser(HtmlNodeCollection values, HtmlNodeCollection titles, string path, bool UsePrefix)
+        public Parser(HtmlNodeCollection values, HtmlNodeCollection titles)
         {
             this.UsePrefix = UsePrefix;
-            Path = path;
             this.values = values;
             this.titles = titles;
 
@@ -51,20 +38,39 @@ namespace TWscraper
             {
                 string nodeText = WebUtility.HtmlDecode(item.InnerText.ToString());
 
+                foreach (char c in nodeText)
+                {
+                    if (c > 127)
+                    {
+                        Console.WriteLine("No uni");
+                        //string doesn't contains UniCode characters
+                    }
+                    else
+                    {
+                        Console.WriteLine("Yes uni");
+
+                        //string contains UniCode characters
+                    }
+                }
+
+
+
                 if (UsePrefix)
                 {
-                    nodeText = Regex.Replace(nodeText, "[^0-9.KMB+\\-%]", "");
+                    nodeText = Regex.Replace(nodeText, "[^0-9.KMB]", "");
                 }
                 else
                 {
-                    nodeText = Regex.Replace(nodeText, "[^0-9.+\\-%]", "");
+                    nodeText = Regex.Replace(nodeText, "[^0-9.-]", "");
+
                 }
                 if (start)
                 {
                     columns.Add(nodeText);
                 }
 
-                if (count == 7)
+                count++;
+                if (count == 8)
                 {
 
                     string titleText = "";
@@ -80,11 +86,8 @@ namespace TWscraper
                     if (start)
                     {
                         dataRows.Add(new DataModel { titleText = titleText, columns = columns });
-                        foreach (var item2 in columns)
-                        {
-                            Console.WriteLine(item2);
-                        }
                         Console.WriteLine("------------------");
+
                         columns = new List<string>();
                         titleCount++;
                     }
@@ -97,7 +100,6 @@ namespace TWscraper
                     count = 0;
                 }
 
-                count++;
             }
 
 
@@ -105,25 +107,26 @@ namespace TWscraper
             return Task.CompletedTask;
         }
 
-        public Task SaveIncomeAsync()
+        public Task SaveIncomeAsync(string path)
         {
             try
             {
-                StreamWriter writer = new StreamWriter(Path);
+                StreamWriter writer = new StreamWriter(path);
 
                 foreach (var row in dataRows)
                 {
-                    writer.Write(row.titleText+ ",");
+                    writer.Write(row.titleText + ",");
 
-                    foreach (var value in row.columns)
+                    for (int i = 0; i < row.columns.Count; i++)
                     {
-                        Console.WriteLine(value + ",");
-                        writer.Write(value + ",");
+                        writer.Write(row.columns[i] + ",");
                     }
+                    
                     writer.WriteLine();
+
                 }
                 writer.Close();
-                Console.WriteLine($"Saved to {Path}");
+                Console.WriteLine($"Saved to {path}");
             }
             catch (Exception e)
             {
