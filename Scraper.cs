@@ -31,6 +31,7 @@ public class Scraper
                 break;
             case "flow":
                 Url = $"https://www.tradingview.com/symbols/{ticker}/financials-cash-flow/";
+                break;
             case "ratios":
                 Url = $"https://www.tradingview.com/symbols/{ticker}/financials-statistics-and-ratios/";
                 break;
