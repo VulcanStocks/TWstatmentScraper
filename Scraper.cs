@@ -11,16 +11,14 @@ public class Scraper
     private HtmlDocument doc { get; set; }
     private HtmlNodeCollection values { get; set; }
     private HtmlNodeCollection titles { get; set; }
-    private bool usePrefix { get; set; }
-    private bool annual { get; set; }
+   private bool annual { get; set; }
     private Parser parser { get; set; }
 
-    public void Initialize(string dataType, string ticker, bool annual, bool usePrefix)
+    public void Initialize(string dataType, string ticker, bool annual)
     {
         xpath = "//div[contains(@class, 'value-pg2GO866')]";
         xpathTitles = "//span[@class='titleText-_PBNXQ7k']";
 
-        this.usePrefix = usePrefix;
         this.annual = annual;
 
         switch (dataType)
@@ -33,15 +31,17 @@ public class Scraper
                 break;
             case "flow":
                 Url = $"https://www.tradingview.com/symbols/{ticker}/financials-cash-flow/";
+            case "ratios":
+                Url = $"https://www.tradingview.com/symbols/{ticker}/financials-statistics-and-ratios/";
                 break;
         }
     }
 
-    public void InitializeParser()
+    public void InitializeParser(bool usePrefix)
     {
         try
         {
-            parser = new Parser(values, titles);
+            parser = new Parser(values, titles, usePrefix);
         }
         catch (Exception)
         {

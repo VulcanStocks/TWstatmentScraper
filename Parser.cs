@@ -18,7 +18,7 @@ namespace TWscraper
         public bool UsePrefix { get; set; }
 
 
-        public Parser(HtmlNodeCollection values, HtmlNodeCollection titles)
+        public Parser(HtmlNodeCollection values, HtmlNodeCollection titles, bool UsePrefix)
         {
             this.UsePrefix = UsePrefix;
             this.values = values;
@@ -38,22 +38,6 @@ namespace TWscraper
             {
                 string nodeText = WebUtility.HtmlDecode(item.InnerText.ToString());
 
-                foreach (char c in nodeText)
-                {
-                    if (c > 127)
-                    {
-                        Console.WriteLine("No uni");
-                        //string doesn't contains UniCode characters
-                    }
-                    else
-                    {
-                        Console.WriteLine("Yes uni");
-
-                        //string contains UniCode characters
-                    }
-                }
-
-
 
                 if (UsePrefix)
                 {
@@ -62,7 +46,6 @@ namespace TWscraper
                 else
                 {
                     nodeText = Regex.Replace(nodeText, "[^0-9.-]", "");
-
                 }
                 if (start)
                 {
@@ -74,20 +57,12 @@ namespace TWscraper
                 {
 
                     string titleText = "";
-                    try
-                    {
-                        titleText = WebUtility.HtmlDecode(titles[titleCount].InnerText.ToString());
-                    }
-                    catch (Exception)
-                    {
-                        
-                    }
+                    titleText = WebUtility.HtmlDecode(titles[titleCount].InnerText.ToString());
+
 
                     if (start)
                     {
                         dataRows.Add(new DataModel { titleText = titleText, columns = columns });
-                        Console.WriteLine("------------------");
-
                         columns = new List<string>();
                         titleCount++;
                     }
