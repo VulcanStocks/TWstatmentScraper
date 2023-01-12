@@ -2,6 +2,7 @@
 using HtmlAgilityPack;
 using PuppeteerSharp;
 using System.IO;
+using TWscraper.Models;
 
 public class Scraper
 {
@@ -98,7 +99,7 @@ public class Scraper
         }
     }
 
-    public async Task ParseIncomeAsync()
+    public async Task ParseStatmentAsync()
     {
         await parser.ParseIncomeAsync();
     }
@@ -108,5 +109,9 @@ public class Scraper
         await parser.SaveIncomeAsync(path);
     }
 
+    public async Task<List<StamentModel>> GetStatmentAsync()
+    {
+        return await parser.GetStatmentAsync();
+    }
 
 }

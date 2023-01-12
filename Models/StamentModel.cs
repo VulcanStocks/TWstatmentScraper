@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TWscraper.Models
 {
-    internal class StamentModel
+    public class StamentModel
     {
-        public string[] Columns { get; set; }
+        public string titleText { get; set; }
+        public List<string> columns { get; set; }
     }
 }

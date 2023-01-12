@@ -1,22 +1,18 @@
 ﻿using HtmlAgilityPack;
 using System.Net;
 using System.Text.RegularExpressions;
+using TWscraper.Models;
 
 namespace TWscraper
 {
 
-    public class DataModel
-    {
-        public string titleText { get; set; }
-        public List<string> columns { get; set; }
-    }
+    
     internal class Parser
     {
         public HtmlNodeCollection values { get; set; }
         public HtmlNodeCollection titles { get; set; }
-        public List<DataModel> dataRows { get; set; }
+        public List<StamentModel> dataRows { get; set; }
         public bool UsePrefix { get; set; }
-
 
         public Parser(HtmlNodeCollection values, HtmlNodeCollection titles, bool UsePrefix)
         {
@@ -24,7 +20,7 @@ namespace TWscraper
             this.values = values;
             this.titles = titles;
 
-            dataRows = new List<DataModel>();
+            dataRows = new List<StamentModel>();
         }
         public Task ParseIncomeAsync()
         {
@@ -62,7 +58,7 @@ namespace TWscraper
 
                     if (start)
                     {
-                        dataRows.Add(new DataModel { titleText = titleText, columns = columns });
+                        dataRows.Add(new StamentModel { titleText = titleText, columns = columns });
                         columns = new List<string>();
                         titleCount++;
                     }
@@ -82,6 +78,11 @@ namespace TWscraper
             return Task.CompletedTask;
         }
 
+        public Task<List<StamentModel>> GetStatmentAsync()
+        {
+            return Task.FromResult(dataRows);
+        }
+
         public Task SaveIncomeAsync(string path)
         {
             try
@@ -96,7 +97,7 @@ namespace TWscraper
                     {
                         writer.Write(row.columns[i] + ",");
                     }
-                    
+
                     writer.WriteLine();
 
                 }
