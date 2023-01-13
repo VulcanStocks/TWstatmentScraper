@@ -20,24 +20,36 @@ public class ScraperService
     private bool annual { get; set; }
     public List<StamentModel> dataRows { get; set; }
     public bool UsePrefix { get; set; }
+    private IBrowser browser  { get; set; }
 
 
     public async Task<string> ScrapeWiki(string param)
     {
-        string wikiXPath = "//*[@id=\"kp-wp-tab-overview\"]/div[1]/div/div/div/div/div/div[1]/div[1]/div/div/div/span[1]";
+        browser = await Puppeteer.LaunchAsync(new LaunchOptions
+        {
+            Headless = true,
+            ExecutablePath = @"C:\Program Files\Google\Chrome\Application\chrome.exe"
+        });
+        string wikicontentXpath = "//*[@id=\"mw-content-text\"]/div[1]/p[not(@*)]";
+        string wikiXPath = "//*[@id=\"kp-wp-tab-overview\"]/div[1]/div/div/div/div/div/div[1]/div[2]/div/div/div/span[2]/a/@href";
         string name = await GetFullName(param);
-        var html = await LoadPage($"https://www.google.com/search?q={name}");
+        var html = await LoadPage($"https://www.google.com/search?q={name}&hl=en");
         doc = new HtmlDocument();
         doc.LoadHtml(html);
 
         try
         {
+            var WikiLink = doc.DocumentNode
+            .SelectSingleNode(wikiXPath).Attributes["href"].Value;
+
+            html = await LoadPage(WikiLink);
+            doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
             var value = doc.DocumentNode
-            .SelectSingleNode(wikiXPath).InnerText;
-
-
-
+            .SelectSingleNode(wikicontentXpath).InnerText;
             return value;
+
         }
         catch (NullReferenceException)
         {
@@ -69,11 +81,7 @@ public class ScraperService
     } 
     private async Task<string> LoadPage(string url)
     {
-        var browser = await Puppeteer.LaunchAsync(new LaunchOptions
-        {
-            Headless = true,
-            ExecutablePath = @"C:\Program Files\Google\Chrome\Application\chrome.exe"
-        });
+        
         using (Page page = (Page)await browser.NewPageAsync())
         {
             await page.GoToAsync(url);
@@ -84,6 +92,7 @@ public class ScraperService
 
     public void InitializeTW(string dataType, string ticker, bool annual, bool UsePrefix)
     {
+
         xpath = "//div[contains(@class, 'value-pg2GO866')]";
         xpathTitles = "//span[@class='titleText-_PBNXQ7k']";
         this.UsePrefix = UsePrefix;
@@ -119,7 +128,7 @@ public class ScraperService
 
     private async Task<string> LoadTWAndWaitForSelector(string url, string selector)
     {
-        var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+        browser = await Puppeteer.LaunchAsync(new LaunchOptions
         {
             Headless = true,
             ExecutablePath = @"C:\Program Files\Google\Chrome\Application\chrome.exe"
