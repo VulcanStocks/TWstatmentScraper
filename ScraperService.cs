@@ -22,18 +22,64 @@ public class ScraperService
     public bool UsePrefix { get; set; }
 
 
-    public string ScrapeWiki(string param)
+    public async Task<string> ScrapeWiki(string param)
     {
         string wikiXPath = "//*[@id=\"kp-wp-tab-overview\"]/div[1]/div/div/div/div/div/div[1]/div[1]/div/div/div/span[1]";
-        var url = $"https://www.google.com/search?q={param}";
-        var web = new HtmlWeb();
-        var doc = web.Load(url);
+        string name = await GetFullName(param);
+        var html = await LoadPage($"https://www.google.com/search?q={name}");
+        doc = new HtmlDocument();
+        doc.LoadHtml(html);
 
-        var value = doc.DocumentNode
-            .SelectNodes(wikiXPath)
-            .First();
+        try
+        {
+            var value = doc.DocumentNode
+            .SelectSingleNode(wikiXPath).InnerText;
 
-        return value.InnerText;
+
+
+            return value;
+        }
+        catch (NullReferenceException)
+        {
+            return "No data available";
+        }
+        
+    }
+
+    public async Task<string> GetFullName(string ticker){
+
+        string NameXPath = "//*[@id=\"anchor-page-1\"]/div/div[2]/div[1]/div[1]/h1";
+
+        var html = await LoadPage($"https://www.tradingview.com/symbols/{ticker}/");
+        doc = new HtmlDocument();
+        doc.LoadHtml(html);
+
+        try
+        {
+            var value = doc.DocumentNode
+            .SelectSingleNode(NameXPath).InnerText;
+            string[] substrings = value.Split(' ');
+
+            return substrings[0];
+        }
+        catch (NullReferenceException)
+        {
+            return "No data available";
+        }
+    } 
+    private async Task<string> LoadPage(string url)
+    {
+        var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+        {
+            Headless = true,
+            ExecutablePath = @"C:\Program Files\Google\Chrome\Application\chrome.exe"
+        });
+        using (Page page = (Page)await browser.NewPageAsync())
+        {
+            await page.GoToAsync(url);
+
+            return await page.GetContentAsync();
+        }
     }
 
     public void InitializeTW(string dataType, string ticker, bool annual, bool UsePrefix)

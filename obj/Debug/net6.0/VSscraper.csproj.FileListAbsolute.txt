@@ -1,0 +1,12 @@
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\bin\Debug\net6.0\VSscraper.deps.json
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\bin\Debug\net6.0\VSscraper.dll
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\bin\Debug\net6.0\VSscraper.pdb
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\obj\Debug\net6.0\VSscraper.csproj.AssemblyReference.cache
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\obj\Debug\net6.0\VSscraper.GeneratedMSBuildEditorConfig.editorconfig
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\obj\Debug\net6.0\VSscraper.AssemblyInfoInputs.cache
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\obj\Debug\net6.0\VSscraper.AssemblyInfo.cs
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\obj\Debug\net6.0\VSscraper.csproj.CoreCompileInputs.cache
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\obj\Debug\net6.0\VSscraper.dll
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\obj\Debug\net6.0\refint\VSscraper.dll
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\obj\Debug\net6.0\VSscraper.pdb
+C:\Programmering\Projekt\VulcanStocks\Scrapers\TWstatmentScraper\obj\Debug\net6.0\ref\VSscraper.dll
