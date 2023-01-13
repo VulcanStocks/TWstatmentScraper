@@ -4,6 +4,8 @@ using PuppeteerSharp;
 using System.IO;
 using TWscraper.Models;
 
+
+
 public class Scraper
 {
     private string Url { get; set; }
@@ -107,6 +109,22 @@ public class Scraper
     public async Task SaveIncomeAsyncToCsv(string path)
     {
         await parser.SaveIncomeAsync(path);
+    }
+
+    public async Task<string[][]> GetStatmentArrayAsync()
+    {
+        var statment = await parser.GetStatmentAsync();
+        string[][] statmentArray= new string[statment.Count][];
+        for (int i = 0; i < statment.Count(); i++)
+        {
+            statmentArray[i] = new string[statment[i].columns.Count()+1];
+            statmentArray[i][0] = statment[i].titleText;
+            for (int j = 0; j < statment[j].columns.Count(); j++)
+            {
+                statmentArray[i][j+1] = statment[i].columns[j];
+            }
+        }
+        return statmentArray;
     }
 
     public async Task<List<StamentModel>> GetStatmentAsync()
