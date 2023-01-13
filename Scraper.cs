@@ -119,7 +119,7 @@ public class Scraper
         {
             statmentArray[i] = new string[statment[i].columns.Count()+1];
             statmentArray[i][0] = statment[i].titleText;
-            for (int j = 0; j < statment[j].columns.Count(); j++)
+            for (int j = 0; j < statment[i].columns.Count(); j++)
             {
                 statmentArray[i][j+1] = statment[i].columns[j];
             }
