@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TWscraper", "TWscraper.csproj", "{EBC5145E-2AA2-45CF-A5C4-874304116FEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VSscraper", "VSscraper.csproj", "{EBC5145E-2AA2-45CF-A5C4-874304116FEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
