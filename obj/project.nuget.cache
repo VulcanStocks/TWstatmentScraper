@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ot/20WXWh4GebYQhpqDnztKxDAlPh2hOsu5j7eyZqPBMQ2SBx5XxMYMRlHpLz/bSJZKrAaiS4LHVNXR5tYv10A==",
+  "dgSpecHash": "BcT1nUXku51GHiqTPkXXamYV0eQc2dcJgOCEyFVo7Y7UqKYflkSnM0m/AoUTc0sQ6OMHJziBZ8AOpOHvP3pxoQ==",
   "success": true,
-  "projectFilePath": "C:\\Programmering\\Projekt\\VulcanStocks\\Scrapers\\TWstatmentScraper\\TWscraper.csproj",
+  "projectFilePath": "C:\\Programmering\\Projekt\\VulcanStocks\\Scrapers\\TWstatmentScraper\\VSscraper.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\21ulwe\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
     "C:\\Users\\21ulwe\\.nuget\\packages\\htmlagilitypack\\1.11.46\\htmlagilitypack.1.11.46.nupkg.sha512",

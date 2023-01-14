@@ -58,6 +58,32 @@ public class ScraperService
         
     }
 
+    public async Task<float> ScrapeRealTimePrice(string ticker)
+    {
+        string url = $"https://www.tradingview.com/symbols/{ticker}/";
+
+        string priceXPath = "//*[@id=\"anchor-page-1\"]/div/div[3]/div[1]/div/div/div/div[1]/div[1]/span";
+
+        var html = await LoadTWAndWaitForSelector(url, "#anchor-page-1 > div > div.tv-category-header__price-line.tv-category-header__price-line--allow-wrap-on-tablet.js-header-symbol-quotes > div.tv-category-header__main-price.js-scroll-container > div > div > div > div.tv-symbol-price-quote__row.js-last-price-block-value-row > div.tv-symbol-price-quote__value.js-symbol-last > span", false);
+        doc = new HtmlDocument();
+        doc.LoadHtml(html);
+
+        try
+        {
+            var node = doc.DocumentNode
+            .SelectSingleNode(priceXPath).InnerText;
+            node = node.Replace('.', ',');
+            float value = float.Parse(node);
+
+            return value;
+
+        }
+        catch (NullReferenceException)
+        {
+            return 0;
+        }
+    }
+
     public async Task<string> GetFullName(string ticker){
 
         string NameXPath = "//*[@id=\"anchor-page-1\"]/div/div[2]/div[1]/div[1]/h1";
@@ -120,13 +146,13 @@ public class ScraperService
 
     public async Task LoadHtmlAsync()
     {
-        var htmlAsTask = await LoadTWAndWaitForSelector(Url, ".value-pg2GO866");
+        var htmlAsTask = await LoadTWAndWaitForSelector(Url, ".value-pg2GO866", true);
         doc = new HtmlDocument();
 
         doc.LoadHtml(htmlAsTask);
     }
 
-    private async Task<string> LoadTWAndWaitForSelector(string url, string selector)
+    private async Task<string> LoadTWAndWaitForSelector(string url, string selector, bool statment)
     {
         browser = await Puppeteer.LaunchAsync(new LaunchOptions
         {
@@ -137,7 +163,7 @@ public class ScraperService
         {
             await page.GoToAsync(url);
 
-            if (annual)
+            if (annual || statment)
             {
                 var button = await page.WaitForSelectorAsync("#FY");
                 // Press the button

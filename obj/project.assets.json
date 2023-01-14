@@ -629,9 +629,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Programmering\\Projekt\\VulcanStocks\\Scrapers\\TWstatmentScraper\\TWscraper.csproj",
-      "projectName": "TWscraper",
-      "projectPath": "C:\\Programmering\\Projekt\\VulcanStocks\\Scrapers\\TWstatmentScraper\\TWscraper.csproj",
+      "projectUniqueName": "C:\\Programmering\\Projekt\\VulcanStocks\\Scrapers\\TWstatmentScraper\\VSscraper.csproj",
+      "projectName": "VSscraper",
+      "projectPath": "C:\\Programmering\\Projekt\\VulcanStocks\\Scrapers\\TWstatmentScraper\\VSscraper.csproj",
       "packagesPath": "C:\\Users\\21ulwe\\.nuget\\packages\\",
       "outputPath": "C:\\Programmering\\Projekt\\VulcanStocks\\Scrapers\\TWstatmentScraper\\obj\\",
       "projectStyle": "PackageReference",
