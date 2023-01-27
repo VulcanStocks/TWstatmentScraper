@@ -3,7 +3,7 @@
 using HtmlAgilityPack;
 using PuppeteerSharp;
 using System.IO;
-using TWscraper.Models;
+using VSscraper.Models;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -25,10 +25,11 @@ public class ScraperService
 
     public async Task<string> ScrapeWiki(string param)
     {
+        using var browserFetcher = new BrowserFetcher();
+        await browserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
         browser = await Puppeteer.LaunchAsync(new LaunchOptions
         {
             Headless = true,
-            ExecutablePath = @"C:\Program Files\Google\Chrome\Application\chrome.exe"
         });
         string wikicontentXpath = "//*[@id=\"mw-content-text\"]/div[1]/p[not(@*)]";
         string wikiXPath = "//*[@id=\"kp-wp-tab-overview\"]/div[1]/div/div/div/div/div/div[1]/div[2]/div/div/div/span[2]/a/@href";

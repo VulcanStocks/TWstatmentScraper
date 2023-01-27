@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TWscraper.Models
+namespace VSscraper.Models
 {
     public class StamentModel
     {
