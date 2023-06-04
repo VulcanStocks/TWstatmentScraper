@@ -52,14 +52,3 @@ await scraper.SaveIncomeAsyncToCsv("path/to/your/file.csv");
 
 To use this library, you need to have .NET installed on your machine. Then, you can clone this repository and reference the project in your solution.
 
-## License
-
-This project is licensed under the MIT License.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Disclaimer
-
-This library is for educational purposes only. Always respect the terms of service of the websites you are scraping.
