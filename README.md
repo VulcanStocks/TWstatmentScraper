@@ -1,34 +1,65 @@
-# TWstatmentScraper
-Welcome to the TWstatmentScraper C# web scraper! This scraper is designed to scrape financial statements from tradingview.com. Here is a brief overview of how to use it:
+# VSscraper
 
-**Getting Started**
-To use the scraper, you will need to first import the TWscraper namespace:
+VSscraper is a .NET library for scraping financial data from TradingView and Wikipedia. It uses the HtmlAgilityPack and PuppeteerSharp libraries to parse HTML and interact with web pages.
 
-using TWscraper;
+## Features
 
-Next, you will need to create a new Scraper object, passing in the type of financial statement you want to scrape (e.g. "balance", "income", "cash flow") and the ticker symbol for the company you are interested in (e.g. "NASDAQ-AAPL" for Apple).
+- Scrape real-time price of a ticker from TradingView.
+- Scrape full name of a ticker from TradingView.
+- Scrape financial statements (income, balance, cash flow, ratios) from TradingView.
+- Scrape introductory paragraph from Wikipedia.
+- Save scraped data to CSV.
 
-var incomeScraper = new Scraper("income", "NASDAQ-AAPL");
+## Usage
 
-**Scraping the Data**
-To scrape the data from the website, you will first need to load the HTML of the page you want to scrape. You can do this using the LoadHtmlAsync method:
+First, initialize the `ScraperService` with the desired data type, ticker, and other options:
 
-await incomeScraper.LoadHtmlAsync();
+```csharp
+ScraperService scraper = new ScraperService();
+scraper.InitializeTW("income", "AAPL", true, true);
+```
 
-Once the HTML has been loaded, you can scrape the data using the ScrapeDataOnce method:
+Then, load the HTML of the page:
 
-incomeScraper.ScrapeDataOnce();
+```csharp
+await scraper.LoadHtmlAsync();
+```
 
-This will extract the relevant financial data from the HTML and store it in the Scraper object.
+Next, scrape the data:
 
-**Saving the Data to a CSV File**
-To save the scraped data to a CSV file, you can use the ParseAndSaveToCsvAsync method, passing in the path to the file you want to create:
+```csharp
+await scraper.ScrapeTWDataAsync();
+```
 
-await incomeScraper.ParseAndSaveToCsvAsync(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + "data.csv");
+Finally, parse the scraped data:
 
-This will save the scraped data to a CSV file in the parent directory of the current working directory, with the file name "data.csv".
+```csharp
+await scraper.ParseStatmentAsync();
+```
 
-**Additional Notes**
-The Scraper object can be used to scrape multiple pages of data by calling the LoadHtmlAsync and ScrapeDataOnce methods multiple times.
-The Scraper object also provides several other methods for accessing and manipulating the scraped data, such as GetData, ClearData, and SortData. Refer to the documentation for more information on these methods.
-I hope this helps get you started with the TWscraper C# web scraper. Happy scraping!
+You can also save the scraped data to a CSV file:
+
+```csharp
+await scraper.SaveIncomeAsyncToCsv("path/to/your/file.csv");
+```
+
+## Dependencies
+
+- HtmlAgilityPack
+- PuppeteerSharp
+
+## Installation
+
+To use this library, you need to have .NET installed on your machine. Then, you can clone this repository and reference the project in your solution.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Disclaimer
+
+This library is for educational purposes only. Always respect the terms of service of the websites you are scraping.
